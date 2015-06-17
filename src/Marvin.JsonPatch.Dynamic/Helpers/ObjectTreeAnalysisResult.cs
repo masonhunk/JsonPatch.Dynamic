@@ -165,7 +165,7 @@ namespace Marvin.JsonPatch.Dynamic.Helpers
                     }
                     else
                     {
-                        IsValidPathForAdd = true;
+                        IsValidPathForAdd = true; 
                         IsValidPathForRemove = true;
                         PropertyInfo = propertyToFind;
                         PropertyPathInParent = leftOverPath.Last();

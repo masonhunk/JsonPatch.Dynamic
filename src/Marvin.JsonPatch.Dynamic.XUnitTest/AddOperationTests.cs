@@ -1,20 +1,18 @@
-﻿using Marvin.JsonPatch.Dynamic;
-using Marvin.JsonPatch.Dynamic.Exceptions;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using Marvin.JsonPatch.Dynamic.Exceptions;
+
+using Newtonsoft.Json;
+
 using Xunit;
+
 
 namespace Marvin.JsonPatch.Dynamic.XUnitTest
 {
     public class AddOperationTests
     {
-
-
         [Fact]
         public void AddNewPropertyShouldFailIfRootIsNotAnExpandoObject()
         {
