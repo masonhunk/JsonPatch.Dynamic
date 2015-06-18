@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Marvin.JsonPatch.Dynamic.Helpers
 {
+    using System.Linq.Expressions;
     using System.Reflection;
+    using System.Runtime.Serialization;
 
     internal class DynamicPropertyHelpers
     {
@@ -38,10 +40,30 @@ namespace Marvin.JsonPatch.Dynamic.Helpers
 
             }
         }
-
+        
         public static ConversionResult ConvertToActualType(Type targetType,object value)
         {
-            //TODO:
+            if (value.GetType().GetTypeInfo().ImplementedInterfaces.Any(i => i == typeof(IConvertible)))
+            {
+                return new ConversionResult(true,Convert.ChangeType(value,targetType));
+            }
+            ParameterExpression lambdaParam = Expression.Parameter(typeof(object));
+            Expression cast = Expression.Convert(lambdaParam, targetType);
+ 
+            
+            var lambda = Expression.Lambda<Func<object, object>>(cast, lambdaParam);
+            var convertMethod= lambda.Compile();
+            
+            try
+            {
+                var converted = convertMethod(value);
+                return new ConversionResult(true,converted);
+            }
+            catch (InvalidCastException)
+            {
+                return new ConversionResult(false,null);
+            }
+            
         }
 
         internal static bool TryGetElementType(Type nominalType,out Type elementType)
